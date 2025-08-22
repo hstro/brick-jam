@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏀 NBA JAM BRICK TRACKER 🏀 - HE'S ON FIRE!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Impact, 'Arial Black', sans-serif;
+            background: radial-gradient(circle at center, #FF6600, #FF0000, #8B0000);
+            background-attachment: fixed;
+            color: #FFFF00;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="3" fill="%23FFFF00" opacity="0.1"/></svg>') repeat;
+            animation: bgMove 10s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes bgMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+
+        .construction-banner {
+            background: linear-gradient(45deg, #FF0000, #FFFF00, #00FF00, #0000FF, #FF00FF);
+            background-size: 300% 300%;
+            animation: rainbowShift 2s ease-in-out infinite;
+            text-align: center;
+            padding: 8px;
+            border: 4px solid #FFFFFF;
+            box-shadow: 0 0 20px #FFFF00;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000000;
+            text-shadow: 1px 1px #FFFFFF;
+        }
+
+        @keyframes rainbowShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .blink {
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .jam-title {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(45deg, #FF6600, #FFFF00, #FF6600);
+            border: 6px outset #FFD700;
+            box-shadow: 0 0 30px #FF6600;
+            margin: 10px;
+        }
+
+        .jam-title h1 {
+            font-size: 48px;
+            color: #FF0000;
+            text-shadow: 4px 4px #000000, -2px -2px #FFFF00;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            animation: titlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .jam-subtitle {
+            font-size: 20px;
+            color: #000080;
+            text-shadow: 2px 2px #FFFFFF;
+            font-weight: bold;
+        }
+
+        .arcade-frame {
+            background: linear-gradient(45deg, #C0C0C0, #808080, #C0C0C0);
+            border: 8px outset #C0C0C0;
+            margin: 15px;
+            padding: 20px;
+            box-shadow: inset 0 0 20px #000000, 0 0 30px #FFD700;
+        }
+
+        .control-panel {
+            background: linear-gradient(45deg, #000000, #333333, #000000);
+            border: 4px inset #808080;
+            padding: 20px;
+            margin: 15px 0;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .player-selector {
+            background: linear-gradient(45deg, #0000FF, #0080FF, #0000FF);
+            border: 4px outset #0080FF;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .player-selector h3 {
+            color: #FFFF00;
+            text-shadow: 2px 2px #000000;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .jam-select {
+            background: #000000;
+            color: #00FF00;
+            border: 3px inset #808080;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .jam-button {
+            background: linear-gradient(45deg, #FF0000, #FF6600, #FF0000);
+            border: 4px outset #FF6600;
+            color: #FFFFFF;
+            font-family: Impact, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 20px;
+            margin: 8px;
+            cursor: pointer;
+            text-shadow: 2px 2px #000000;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+        }
+
+        .jam-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.7);
+            background: linear-gradient(45deg, #FF6600, #FFFF00, #FF6600);
+        }
+
+        .jam-button:active {
+            transform: translateY(0);
+            border: 4px inset #FF6600;
+        }
+
+        .stats-display {
+            background: linear-gradient(45deg, #008000, #00FF00, #008000);
+            border: 4px outset #00FF00;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #000000;
+            border: 3px solid #FFFF00;
+        }
+
+        .stats-table th {
+            background: linear-gradient(45deg, #FF0000, #FFFF00);
+            color: #000000;
+            padding: 12px;
+            font-size: 14px;
+            text-shadow: 1px 1px #FFFFFF;
+            border: 2px outset #FFD700;
+        }
+
+        .stats-table td {
+            background: #000080;
+            color: #FFFFFF;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 1px 1px #000000;
+            border: 1px solid #FFFF00;
+        }
+
+        .fire-mode {
+            animation: fireEffect 1s ease-in-out infinite;
+            box-shadow: 0 0 30px #FF0000;
+        }
+
+        @keyframes fireEffect {
+            0%, 100% { 
+                background: linear-gradient(45deg, #FF0000, #FF6600);
+                transform: scale(1);
+            }
+            50% { 
+                background: linear-gradient(45deg, #FF6600, #FFFF00);
+                transform: scale(1.02);
+            }
+        }
+
+        .brick-jam {
+            position: absolute;
+            width: 45px;
+            height: 22px;
+            background: linear-gradient(45deg, #8B4513, #CD853F, #FFD700);
+            border: 3px outset #CD853F;
+            border-radius: 4px;
+            pointer-events: none;
+            z-index: 1000;
+            font-family: Impact, sans-serif;
+            font-size: 10px;
+            color: #000000;
+            text-align: center;
+            line-height: 16px;
+            font-weight: bold;
+            text-shadow: 1px 1px #FFFFFF;
+            animation: brickSlam 2s ease-out forwards;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.8);
+        }
+
+        @keyframes brickSlam {
+            0% {
+                transform: translateY(-200px) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            30% {
+                opacity: 1;
+                transform: translateY(-50px) rotate(180deg) scale(1.2);
+            }
+            70% {
+                transform: translateY(10px) rotate(270deg) scale(1);
+            }
+            100% {
+                transform: translateY(0) rotate(var(--rotation)) scale(1);
+                opacity: 0.9;
+            }
+        }
+
+        .explosion-effect {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #FFFF00, #FF6600, #FF0000);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+            animation: explode 0.8s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        .scoreboard {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #000000, #333333);
+            border: 4px outset #FFD700;
+            padding: 15px;
+            color: #00FF00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            z-index: 2000;
+            box-shadow: 0 0 20px #FFD700;
+        }
+
+        .scoreboard h4 {
+            color: #FFFF00;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px #000000;
+        }
+
+        .brick-counter-big {
+            font-size: 24px;
+            color: #FF0000;
+            font-weight: bold;
+            text-shadow: 2px 2px #000000;
+        }
+
+        .player-info-jam {
+            background: linear-gradient(45deg, #4B0082, #8A2BE2, #4B0082);
+            border: 6px outset #8A2BE2;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px #8A2BE2;
+        }
+
+        .player-name-jam {
+            font-size: 32px;
+            color: #FFFF00;
+            text-shadow: 3px 3px #000000, -1px -1px #FF0000;
+            text-align: center;
+            margin-bottom: 15px;
+            animation: playerGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes playerGlow {
+            0%, 100% { text-shadow: 3px 3px #000000, -1px -1px #FF0000; }
+            50% { text-shadow: 3px 3px #000000, -1px -1px #FF0000, 0 0 15px #FFFF00; }
+        }
+
+        .arcade-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .custom-input-jam {
+            background: #000000;
+            color: #00FF00;
+            border: 3px inset #808080;
+            padding: 8px;
+            font-family: Impact, sans-serif;
+            font-size: 16px;
+            width: 80px;
+            text-align: center;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(45deg, #FF00FF, #8A2BE2, #FF00FF);
+            border: 6px outset #FF00FF;
+            margin: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px #FF00FF;
+        }
+
+        .welcome-screen h2 {
+            font-size: 36px;
+            color: #FFFF00;
+            text-shadow: 4px 4px #000000;
+            margin-bottom: 20px;
+            animation: welcomePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes welcomePulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #000000;
+            color: #00FF00;
+            padding: 10px;
+            border: 2px solid #00FF00;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            z-index: 2000;
+        }
+
+        .cheat-code {
+            color: #FFFF00;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .jam-title h1 { font-size: 32px; }
+            .control-panel { grid-template-columns: 1fr; }
+            .arcade-buttons { flex-direction: column; align-items: center; }
+            .jam-button { width: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Construction Banner -->
+    <div class="construction-banner">
+        <span class="blink">🚧 BOOMSHAKALAKA! 🚧</span> - SITE UNDER CONSTRUCTION - <span class="blink">🚧 FROM DOWNTOWN! 🚧</span>
+    </div>
+
+    <!-- Main Title -->
+    <div class="jam-title">
+        <h1>🏀 NBA JAM BRICK TRACKER 🏀</h1>
+        <div class="jam-subtitle">HE'S ON FIRE! 🔥 TRACKING MISSES SINCE '93!</div>
+    </div>
+
+    <!-- Arcade Frame -->
+    <div class="arcade-frame">
+        <div class="control-panel">
+            <!-- Player Selection -->
+            <div class="player-selector">
+                <h3>SELECT PLAYER</h3>
+                <select id="playerSelect" class="jam-select">
+                    <option value="">CHOOSE YOUR FIGHTER...</option>
+                    <option value="jordan">🐐 MICHAEL JORDAN - BULLS</option>
+                    <option value="shaq">🏗️ SHAQUILLE O'NEAL - MAGIC</option>
+                    <option value="pippen">🛡️ SCOTTIE PIPPEN - BULLS</option>
+                    <option value="barkley">💪 CHARLES BARKLEY - SUNS</option>
+                    <option value="hakeem">🕌 HAKEEM OLAJUWON - ROCKETS</option>
+                    <option value="malone">📮 KARL MALONE - JAZZ</option>
+                    <option value="stockton">🎯 JOHN STOCKTON - JAZZ</option>
+                    <option value="robinson">⚓ DAVID ROBINSON - SPURS</option>
+                    <option value="ewing">🗽 PATRICK EWING - KNICKS</option>
+                    <option value="kemp">☔ SHAWN KEMP - SONICS</option>
+                </select>
+
+                <h3 style="margin-top: 15px;">SELECT SEASON</h3>
+                <select id="seasonSelect" class="jam-select">
+                    <option value="career">CAREER TOTAL</option>
+                    <option value="1995-96">1995-96 SEASON</option>
+                    <option value="1994-95">1994-95 SEASON</option>
+                    <option value="1993-94">1993-94 SEASON</option>
+                    <option value="1992-93">1992-93 SEASON</option>
+                    <option value="1991-92">1991-92 SEASON</option>
+                </select>
+            </div>
+
+            <!-- Stats Display -->
+            <div class="stats-display">
+                <h3 style="color: #FFFF00; text-shadow: 2px 2px #000000; margin-bottom: 10px; text-align: center;">PLAYER STATS</h3>
+                <div id="playerStatsArea">
+                    <div class="welcome-screen">
+                        <h2>WELCOME TO THE COURT!</h2>
+                        <p style="font-size: 18px; color: #FFFFFF; text-shadow: 2px 2px #000000;">
+                            SELECT A PLAYER TO START TRACKING BRICKS!<br>
+                            <span class="blink" style="color: #00FF00;">BOOMSHAKALAKA!</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Info Area -->
+        <div id="playerInfo" class="player-info-jam" style="display: none;">
+            <h2 id="playerName" class="player-name-jam"></h2>
+            
+            <table class="stats-table">
+                <tr>
+                    <th>STAT TYPE</th>
+                    <th>COUNT</th>
+                    <th>STATUS</th>
+                </tr>
+                <tr>
+                    <td><strong>CAREER BRICKS</strong></td>
+                    <td id="careerBricks" class="brick-counter-big">0</td>
+                    <td>💥</td>
+                </tr>
+                <tr>
+                    <td><strong>SEASON BRICKS</strong></td>
+                    <td id="seasonBricks" style="color: #00FFFF; font-size: 20px;">0</td>
+                    <td>📊</td>
+                </tr>
+                <tr>
+                    <td><strong>PER GAME AVG</strong></td>
+                    <td id="avgPerGame" style="color: #00FF00; font-size: 18px;">0.0</td>
+                    <td>📈</td>
+                </tr>
+                <tr>
+                    <td><strong>BRICK RATE</strong></td>
+                    <td id="brickRate" style="color: #FF00FF; font-size: 18px;">0.0%</td>
+                    <td>🎯</td>
+                </tr>
+            </table>
+
+            <div class="arcade-buttons">
+                <button class="jam-button" onclick="addBrick(1)">
+                    ADD 1 BRICK 🧱<br><small>CLANK!</small>
+                </button>
+                <input type="number" id="customBrickInput" class="custom-input-jam" value="5" min="1" max="99">
+                <button class="jam-button" onclick="addCustomBricks()">
+                    ADD CUSTOM<br><small>BOOMSHAKALAKA!</small>
+                </button>
+                <button class="jam-button" onclick="clearAllBricks()" style="background: linear-gradient(45deg, #8B0000, #FF0000);">
+                    CLEAR COURT<br><small>RESET!</small>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoreboard -->
+    <div class="scoreboard">
+        <h4>🏀 LIVE STATS</h4>
+        <div>Bricks on Court: <span id="brickCount" class="brick-counter-big">0</span></div>
+        <div>Total Added: <span id="totalAdded">0</span></div>
+        <div>Status: <span id="playerStatus">READY!</span></div>
+    </div>
+
+    <!-- Easter Egg -->
+    <div class="easter-egg">
+        <div>CHEAT CODES:</div>
+        <div class="cheat-code">SPACE = ADD BRICK</div>
+        <div class="cheat-code">ENTER = CUSTOM BRICKS</div>
+        <div class="cheat-code">ESC = CLEAR ALL</div>
+    </div>
+
+    <script>
+        // 90s NBA Jam Player Database
+        const playerDatabase = {
+            jordan: {
+                name: "MICHAEL JORDAN",
+                team: "CHICAGO BULLS",
+                nickname: "HIS AIRNESS",
+                careerBricks: 5234,
+                seasons: {
+                    "1995-96": { bricks: 456, games: 82, attempts: 1234 },
+                    "1994-95": { bricks: 234, games: 17, attempts: 456 },
+                    "1993-94": { bricks: 0, games: 0, attempts: 0 },
+                    "1992-93": { bricks: 523, games: 78, attempts: 1356 },
+                    "1991-92": { bricks: 498, games: 80, attempts: 1298 }
+                }
+            },
+            shaq: {
+                name: "SHAQUILLE O'NEAL",
+                team: "ORLANDO MAGIC",
+                nickname: "THE BIG ARISTOTLE",
+                careerBricks: 3456,
+                seasons: {
+                    "1995-96": { bricks: 567, games: 54, attempts: 987 },
+                    "1994-95": { bricks: 623, games: 79, attempts: 1234 },
+                    "1993-94": { bricks: 589, games: 81, attempts: 1156 },
+                    "1992-93": { bricks: 634, games: 81, attempts: 1234 },
+                    "1991-92": { bricks: 445, games: 81, attempts: 934 }
+                }
+            },
+            pippen: {
+                name: "SCOTTIE PIPPEN",
+                team: "CHICAGO BULLS",
+                nickname: "NO TIPPIN'",
+                careerBricks: 4123,
+                seasons: {
+                    "1995-96": { bricks: 423, games: 77, attempts: 934 },
+                    "1994-95": { bricks: 456, games: 79, attempts: 1023 },
+                    "1993-94": { bricks: 398, games: 72, attempts: 889 },
+                    "1992-93": { bricks: 445, games: 81, attempts: 1001 },
+                    "1991-92": { bricks: 389, games: 82, attempts: 876 }
+                }
+            },
+            barkley: {
+                name: "CHARLES BARKLEY",
+                team: "PHOENIX SUNS",
+                nickname: "THE ROUND MOUND",
+                careerBricks: 6789,
+                seasons: {
+                    "1995-96": { bricks: 623, games: 71, attempts: 1234 },
+                    "1994-95": { bricks: 567, games: 68, attempts: 1123 },
+                    "1993-94": { bricks: 634, games: 65, attempts: 1234 },
+                    "1992-93": { bricks: 712, games: 76, attempts: 1456 },
+                    "1991-92": { bricks: 698, games: 75, attempts: 1389 }
+                }
+            },
+            hakeem: {
+                name: "HAKEEM OLAJUWON",
+                team: "HOUSTON ROCKETS",
+                nickname: "THE DREAM",
+                careerBricks: 4567,
+                seasons: {
+                    "1995-96": { bricks: 445, games: 78, attempts: 1023 },
+                    "1994-95": { bricks: 423, games: 72, attempts: 934 },
+                    "1993-94": { bricks: 456, games: 80, attempts: 1034 },
+                    "1992-93": { bricks: 467, games: 82, attempts: 1067 },
+                    "1991-92": { bricks: 434, games: 70, attempts: 987 }
+                }
+            },
+            malone: {
+                name: "KARL MALONE",
+                team: "UTAH JAZZ",
+                nickname: "THE MAILMAN",
+                careerBricks: 7234,
+                seasons: {
+                    "1995-96": { bricks: 634, games: 82, attempts: 1345 },
+                    "1994-95": { bricks: 623, games: 82, attempts: 1289 },
+                    "1993-94": { bricks: 656, games: 82, attempts: 1356 },
+                    "1992-93": { bricks: 612, games: 82, attempts: 1278 },
+                    "1991-92": { bricks: 598, games: 81, attempts: 1234 }
+                }
+            },
+            stockton: {
+                name: "JOHN STOCKTON",
+                team: "UTAH JAZZ", 
+                nickname: "THE POINT GOD",
+                careerBricks: 2345,
+                seasons: {
+                    "1995-96": { bricks: 234, games: 82, attempts: 623 },
+                    "1994-95": { bricks: 223, games: 82, attempts: 589 },
+                    "1993-94": { bricks: 245, games: 82, attempts: 634 },
+                    "1992-93": { bricks: 234, games: 82, attempts: 612 },
+                    "1991-92": { bricks: 223, games: 82, attempts: 567 }
+                }
+            },
+            robinson: {
+                name: "DAVID ROBINSON",
+                team: "SAN ANTONIO SPURS",
+                nickname: "THE ADMIRAL",
+                careerBricks: 3789,
+                seasons: {
+                    "1995-96": { bricks: 423, games: 82, attempts: 989 },
+                    "1994-95": { bricks: 456, games: 81, attempts: 1023 },
+                    "1993-94": { bricks: 434, games: 80, attempts: 967 },
+                    "1992-93": { bricks: 445, games: 82, attempts: 1001 },
+                    "1991-92": { bricks: 423, games: 68, attempts: 923 }
+                }
+            },
+            ewing: {
+                name: "PATRICK EWING",
+                team: "NEW YORK KNICKS",
+                nickname: "THE WARRIOR",
+                careerBricks: 5678,
+                seasons: {
+                    "1995-96": { bricks: 567, games: 76, attempts: 1234 },
+                    "1994-95": { bricks: 534, games: 79, attempts: 1156 },
+                    "1993-94": { bricks: 623, games: 79, attempts: 1289 },
+                    "1992-93": { bricks: 598, games: 81, attempts: 1245 },
+                    "1991-92": { bricks: 612, games: 82, attempts: 1278 }
+                }
+            },
+            kemp: {
+                name: "SHAWN KEMP",
+                team: "SEATTLE SUPERSONICS",
+                nickname: "THE REIGN MAN", 
+                careerBricks: 2987,
+                seasons: {
+                    "1995-96": { bricks: 445, games: 79, attempts: 934 },
+                    "1994-95": { bricks: 423, games: 82, attempts: 889 },
+                    "1993-94": { bricks: 456, games: 79, attempts: 967 },
+                    "1992-93": { bricks: 434, games: 78, attempts: 923 },
+                    "1991-92": { bricks: 389, games: 64, attempts: 823 }
+                }
+            }
+        };
+
+        // Game state
+        let currentPlayer = null;
+        let currentSeason = 'career';
+        let sessionBricks = 0;
+        let totalBricksAdded = 0;
+        let brickElements = [];
+        let isOnFire = false;
+        let fireStreak = 0;
+
+        // NBA Jam sound effects
+        const jamSounds = {
+            select: () => playBeep(800, 0.1),
+            brick: () => playBeep(200, 0.3),
+            boomshakalaka: () => {
+                playBeep(400, 0.2);
+                setTimeout(() => playBeep(600, 0.2), 200);
+                setTimeout(() => playBeep(800, 0.3), 400);
+            },
+            onFire: () => {
+                for(let i = 0; i < 5; i++) {
+                    setTimeout(() => playBeep(1000 + i * 200, 0.1), i * 100);
+                }
+            }
+        };
+
+        function playBeep(frequency, duration) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch(e) {
+                console.log('Audio not available');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('playerSelect').addEventListener('change', function(e) {
+            jamSounds.select();
+            
